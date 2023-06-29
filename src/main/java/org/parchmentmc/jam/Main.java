@@ -27,7 +27,7 @@ public class Main {
                 (existingIdentifiers, existingMappings) -> ManagedExistingIdentitySupplier.load(identityManager, existingIdentifiers),
                 OfficialExistingNameSupplier::new,
                 existingIdentifiers -> new ManagedNewIdentitySupplier(identityManager),
-                new ExpandedNamedASTBuilder(),
+                ExpandedNamedASTBuilder::new,
                 BlackstoneMetadataASTBuilder::new,
                 () -> new ManagedNamedASTOutputWriter(identityManager),
                 Main::createRuntimeConfiguration,
