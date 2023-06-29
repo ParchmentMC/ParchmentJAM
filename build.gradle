@@ -1,0 +1,71 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'org.parchmentmc.writtenbooks' version '0.5.+'
+    id 'application'
+    id 'maven-publish'
+}
+
+group = 'org.parchmentmc.jam'
+
+writtenbooks {
+    githubRepo = 'ParchmentMC/ParchmentJAM'
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
+
+repositories {
+    maven {
+        name = 'LDTTeam'
+        url = 'https://ldtteam.jfrog.io/ldtteam/mods-maven'
+    }
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
+    maven {
+        name = 'MinecraftForge'
+        url = 'https://maven.minecraftforge.net'
+    }
+}
+
+dependencies {
+    implementation 'com.ldtteam.jam:jam-jam:2.0'
+    implementation 'com.ldtteam.jam:jam-spi:2.0'
+    implementation 'com.ldtteam.jam:jam-runtime:2.0'
+    implementation 'com.ldtteam.jam:jam-mcpconfig:2.0'
+    compileOnly 'org.checkerframework:checker-qual:3.35.0'
+    implementation 'org.ow2.asm:asm-tree:9.1'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+
+    implementation 'org.parchmentmc:feather:1.1.0'
+    implementation 'org.parchmentmc.feather:io-gson:1.1.0'
+
+    implementation 'net.minecraftforge:srgutils:0.5.4'
+
+    implementation 'com.google.guava:guava:32.0.1-jre'
+}
+
+application {
+    mainClass = 'org.parchmentmc.jam.Main'
+}
+
+tasks.named(sourceSets.main.jarTaskName, Jar) {
+    it.manifest {
+        attributes.put("Main-Class", application.mainClass)
+    }
+}
+
+publishing {
+    publications.create("mavenJava", MavenPublication) {
+        from components.java
+        artifactId = 'jam-parchment'
+
+        pom {
+            name = "ParchmentJAM"
+            description = "JarAwareMapping integration application for ParchmentMC."
+        }
+    }
+}
