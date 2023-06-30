@@ -60,6 +60,10 @@ default) respectively.
 (Because the identifiers data does not contain a way to express it, the lambda meta information will not be written even
 if `--writeLambdaMetaInformation`/`-wli` is set to `true`.)
 
+## License
+
+This project is licensed under the MIT License. Consult the `LICENSE.txt` file for details.
+
 [jammer]: https://github.com/marchermans/JarAwareMapping
 
 [mcpconfig]: https://github.com/MinecraftForge/MCPConfig
