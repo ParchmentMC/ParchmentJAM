@@ -8,6 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Manages the mapping of global identities and loaded data.
+ *
+ * <p>This class has no public API. It is meant to be passed to classes, which make use of this class to store
+ * information between those classes.</p>
+ */
 public class IdentityManager {
     final MappingDataBuilder loadedData = new MappingDataBuilder();
     private final AtomicInteger identityCounter = new AtomicInteger(0);

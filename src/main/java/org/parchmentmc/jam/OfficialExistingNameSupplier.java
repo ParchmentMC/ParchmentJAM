@@ -15,6 +15,12 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Supplies existing names by converting raw obfuscated names to official Mojang names.
+ *
+ * <p>This class is derived from {@link com.ldtteam.jam.mcpconfig.TSRGExistingNameSupplier}, with modifications as
+ * SRG names are not available in this environment.</p>
+ */
 public class OfficialExistingNameSupplier implements IExistingNameSupplier {
     private final IMappingFile mojToObf;
 

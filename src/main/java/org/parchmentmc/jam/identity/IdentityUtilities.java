@@ -3,6 +3,7 @@ package org.parchmentmc.jam.identity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ldtteam.jam.spi.asm.ParameterData;
+import org.objectweb.asm.tree.MethodNode;
 import org.parchmentmc.feather.io.gson.MDCGsonAdapterFactory;
 import org.parchmentmc.feather.io.gson.SimpleVersionAdapter;
 import org.parchmentmc.feather.mapping.MappingDataBuilder;
@@ -35,11 +36,40 @@ final class IdentityUtilities {
     // slot index. Thankfully, we have access to the MethodNode in all cases where we need to convert a parameter index,
     // so we can pull the method descriptor and the method access from that.
 
+    /**
+     * Calculates the JVM slot for the given {@link ParameterData}.
+     *
+     * <p>What JAMMER call the parameter's index is just a counting index -- one which starts at 0 for the first
+     * parameter, and increments by 1 for each additional parameter.</p>
+     *
+     * <p>However, the Parchment mapping data and the structures in this class assume that a parameter index means the
+     * <em>JVM slot index</em>; starts at 1 for instance methods or 0 for {@code static} methods, and increments by 1
+     * for except it increments by 2 for parameters that are (non-array) {@code double}s or {@code long}s.</p>
+     *
+     * <p>So we have to convert the counting index from JAMMER's data structures (in this case, {@link ParameterData})
+     * to a JVM slot index. Thankfully, we have access to the {@link MethodNode} in all cases where we need to convert
+     * a parameter index, so we can pull the method descriptor and the method access information (for
+     * {@code static}-ness from that.</p>
+     *
+     * @param data the parameter data
+     * @return the JVM slot for the parameter
+     */
     public static int calculateJVMSlot(ParameterData data) {
         return calculateJVMSlot((byte) data.index(), data.owner().node().desc, Modifier.isStatic(data.owner().node().access));
     }
 
     // Converts a counting index to a JVM slot
+
+    /**
+     * Calculates the JVM slot for the given (counting) parameter index, based off of the method descriptor and
+     * {@code static}-ness.
+     *
+     * @param targetIndex the (counting) parameter index to convert
+     * @param descriptor  the method descriptor
+     * @param isStatic    whether the method is {@code static} or not
+     * @return the JVM slot for the given parameter index.
+     * @see #calculateJVMSlot(ParameterData)
+     */
     public static int calculateJVMSlot(byte targetIndex, String descriptor, boolean isStatic) {
         // Assume descriptor is well-formed
         String parameters = descriptor.substring(1, descriptor.indexOf(')'));
@@ -90,6 +120,12 @@ final class IdentityUtilities {
     }
 
     // Copied from Compass -- MappingUtil#removeUndocumented
+
+    /**
+     * Removes undocumented members from a {@link MappingDataBuilder} by modifying it in-place.
+     * 
+     * @param builder the data to modify
+     */
     public static void removeUndocumented(MappingDataBuilder builder) {
         builder.getPackages().stream()
                 .filter(s -> s.getJavadoc().isEmpty())
