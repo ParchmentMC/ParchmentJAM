@@ -30,8 +30,8 @@ immediate next.
 The main class is at `org.parchmentmc.jam.Main`. Users may avail of the `-all` classifier JAR, which has all necessary
 runtime dependencies shaded in.
 
-Broadly speaking, there are two types of data inputs: data for **existing versions**, and data for the **input version
-**. For clarity, what JAMMER calls the input version we will call the **target version**.
+Broadly speaking, there are two types of data inputs: data for **existing versions**, and data for the **input
+version**. For clarity, what JAMMER calls the input version we will call the **target version**.
 
 The command-line arguments for the data inputs for versions must all be present. Particularly, the number of invocations
 of each command-line argument for existing versions must match; if `--existingNames` is invoked twice, all other
